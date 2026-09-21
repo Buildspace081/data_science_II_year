@@ -1,0 +1,360 @@
+%!TEX root = ../main.tex
+
+
+
+\section{Introduction to the Course}
+
+\subsection{Course Title and Overview}
+
+The course is \textbf{Text Mining}, taught in the Data Science master's program at the University of Naples Federico II (DIETI department), A.Y. 2026/27. The instructor is Flora Amato.
+
+ \emph{``From words to LLM agents: a hands-on journey through language models.''} This frames the whole course as a progression:
+
+\begin{itemize}
+    \item Start from the most basic unit a machine can process: a word (or more precisely, a token).
+    \item Move up to language models that can understand and generate text.
+    \item End with \textbf{LLM agents}, i.e., systems that use a language model as a reasoning engine embedded inside a larger pipeline of tools, memory, and decision-making logic.
+\end{itemize}
+
+This trajectory (word $\rightarrow$ token $\rightarrow$ model $\rightarrow$ agent) is the conceptual backbone of the entire syllabus, and it foreshadows the three-act structure that will be introduced later.
+
+\vspace{0.2cm}
+
+The course is built entirely around the \textbf{Transformer architecture}, introduced by Vaswani et al. in 2017 (``Attention Is All You Need''), which is the foundation of virtually every modern language model (BERT, GPT, T5, LLaMA, etc.).
+
+\subsubsection{Instructor and Expected Student Profile}
+
+\textbf{The instructor.} Flora Amato is an Associate Professor at DIETI and leads the \textbf{IDEAL Research Lab}, whose focus areas are:
+
+\begin{itemize}
+    \item Trustworthy AI,
+    \item Retrieval-Augmented Generation (RAG) architectures,
+    \item Agentic systems.
+\end{itemize}
+
+These three research areas are not incidental, they map almost exactly onto the third act of the course (orchestration, retrieval, and agents), which suggests that the final part of the syllabus will draw heavily on the instructor's own research.
+
+
+\subsection{What is Text Mining, and Why LLMs?}
+
+\subsubsection{Defining Text Mining: Read, Write, Act}
+
+\begin{defbox}{Text Mining}
+Text mining is the process of turning unstructured or semi-structured text into a representation that a machine can reason about, and consequently into something a human (or another system) can act upon. It spans the full pipeline from raw text to actionable knowledge.
+\end{defbox}
+
+We can organize text mining into three macro-capabilities, which will recur constantly throughout the course as the ``two families of models plus the software around them'' framing:
+
+\begin{itemize}
+    \item \textbf{READ: Understand text.} This is the job of \textbf{encoders}. Tasks include classification (e.g., sentiment analysis), tagging (e.g., Named Entity Recognition), extractive question answering, and semantic search (finding text by meaning rather than by exact keyword match).
+
+    \vspace{0.2cm}
+    \item \textbf{WRITE: Generate text.} This is the job of \textbf{decoders}. Tasks include translation, summarization, chat, and instruction following. Mechanically, this always reduces to \emph{predicting the next token and repeating the process} (autoregressive generation).
+
+    \vspace{0.2cm}
+    \item \textbf{ACT: Orchestrate.} This is not the job of the model itself, but of the \textbf{software wrapped around the model}: retrieving external knowledge, routing a request to the right sub-system, calling external tools, maintaining state across turns, and looping until a task is completed.
+\end{itemize}
+
+Conceptually, this READ/WRITE/ACT triad already anticipates the encoder/decoder/orchestration distinction that structures Acts I, II, and III of the course. It is worth internalizing early because virtually every subsequent topic will be filed under one of these three headings.
+
+\subsubsection{Why a Text Mining Course is Full of LLMs}
+
+There are three justifications for centering an entire text mining course on Large Language Models, rather than on the older, task-specific NLP pipelines (e.g., separate models for POS-tagging, NER, sentiment, etc.):
+
+\begin{enumerate}
+    \item \textbf{The transformer ate NLP.} Since 2017, essentially all major NLP tasks (sentiment analysis, entity recognition, question answering, translation, summarization, chat) are solved using the same underlying architecture: the Transformer. This means a single architectural understanding transfers across the whole field. You learn attention and self-attention once, and reuse that knowledge everywhere.
+
+    \vspace{0.2cm}
+    \item \textbf{Open models are one function call away.} Platforms like Hugging Face host thousands of pretrained models accessible through a simple, unified interface. A Hugging Face \emph{pipeline} is conceptually just:
+    $$\text{preprocess} \rightarrow \text{forward pass} \rightarrow \text{postprocess}$$
+    and each of these three stages can be inspected and modified individually, which makes the models pedagogically transparent rather than a black box.
+
+    \vspace{0.2cm}
+    \item \textbf{The hard part moved.} Historically, the bottleneck in NLP was training a model from scratch. Today, with pretrained open models freely available, the bottleneck has shifted to \textbf{orchestration}: retrieval, routing, tool integration, state management, and agentic control flow. This is precisely the point at which ``text mining'' stops being pure machine learning and becomes \textbf{software engineering around a model}.
+\end{enumerate}
+
+\begin{defbox}{Transformer (informal, first mention)}
+A neural network architecture, introduced in 2017, that processes sequences of tokens using a mechanism called \textbf{self-attention}, which allows every token in a sequence to directly weigh the relevance of every other token, rather than processing the sequence strictly left-to-right or right-to-left as older recurrent architectures (RNNs, LSTMs) did. It is the common architectural ancestor of BERT, GPT, T5, LLaMA, and virtually all modern LLMs. 
+\end{defbox}
+
+Full architectural detail is deferred to Act I , where tokenization, embeddings, and attention are treated formally.
+
+
+\subsubsection{The Three Acts of the Course}
+
+The course is organized as a narrative arc in three acts, moving from understanding to generation to orchestration:
+
+\begin{itemize}
+    \item \textbf{Act I -- From Deep Learning to LLMs} (15 Sep -- 8 Oct, 8 sessions, notebooks 0--3). Introduces the Transformer and teaches \textbf{encoders} to read: classification, tagging, and question answering.
+
+    \vspace{0.2cm}
+    \item \textbf{Act II -- Decoding models \& GenAI services} (13 Oct -- 29 Oct, 6 sessions, notebooks 4, 6, 6.5). Teaches \textbf{decoders} to write, and then covers how to deploy a model behind an inference server so that it can be queried by other programs and users.
+
+    \vspace{0.2cm}
+    \item \textbf{Act III -- Orchestration, retrieval \& agents} (3 Nov -- 17 Dec, 12 sessions, notebooks 7, 7.5, 7.6, plus the final project). Gives models access to external knowledge, tools, memory, and a goal (i.e., turns a raw model into an \textbf{agent}).
+\end{itemize}
+
+Note that Act III is by far the longest (12 of 26 sessions), signaling that orchestration and agentic behavior are the intended center of gravity of the course, consistent with the instructor's own research focus.
+
+\subsubsection{Course Objectives}
+
+By the end of the course, the student should be able to:
+
+\begin{enumerate}
+    \item \textbf{Understand how LLMs work}: tokens, embeddings, attention; the distinction between encoders, decoders, and encoder-decoders, and the reasons each architecture family is preferable for certain tasks.
+
+    \vspace{0.2cm}
+    \item \textbf{Use LLMs to solve text problems}: applying open-source models to language reasoning, generation, and conversational tasks, while remaining mindful of a realistic compute budget (i.e., without assuming access to unlimited GPU resources).
+
+    \vspace{0.2cm}
+    \item \textbf{Deploy and talk to LLM servers}: setting up inference servers exposing OpenAI-style APIs, and handling streaming responses and concurrent requests, because a model becomes practically useful only once other programs can call it reliably.
+
+    \vspace{0.2cm}
+    \item \textbf{Orchestrate LLMs into real applications}: prompt engineering, retrieval-augmented generation (RAG), routing between components, tool calling, agentic loops, and building agents as state graphs using LangGraph.
+\end{enumerate}
+
+These four objectives map directly onto the three acts: objective 1 belongs to Act I, objectives 2--3 to Act II, and objective 4 to Act III.
+
+\subsubsection{Prerequisites and Tools}
+
+
+
+\textbf{Required (``Bring''):}
+\begin{itemize}
+    \item Intermediate Python: functions, loops, dictionaries, basic pandas.
+    \item Fundamentals of deep learning: familiarity with the concepts of a neural network and a loss function.
+    \item A laptop and a Google account, since the practical work happens in Google Colab and JupyterLab notebooks.
+    \item Curiosity, together with a healthy skepticism toward any system that claims to ``understand'' language.
+\end{itemize}
+
+\textbf{Not required (``Leave at home''):}
+\begin{itemize}
+    \item A GPU: Colab and hosted inference endpoints already provide the necessary compute.
+    \item Fear of mathematics: the only mathematical machinery needed is dot products and the softmax function, described as ``the scary part, and it is not scary.''
+    \item Prior fluency in transformer-specific jargon: the vocabulary (tokens, attention, embeddings, etc.) will be built incrementally throughout the course.
+    \item The belief that LLMs are magic: mechanically, an LLM performs \textbf{next-token prediction}, repeated in a loop. This is ``still amazing,'' despite being conceptually simple.
+\end{itemize}
+
+\begin{defbox}{Next-token prediction (informal)}
+The core computational operation performed by decoder-style language models: given a sequence of tokens as input, the model outputs a probability distribution over the vocabulary for what the \emph{next} token should be. Generating a full piece of text is simply this operation applied repeatedly, each time appending the newly predicted token to the input and feeding the extended sequence back into the model (autoregressive generation). This concept will be treated formally in Act II (GPT-style models).
+\end{defbox}
+
+\subsection{The Open-Source LLM Toolbox }
+
+The course's practical ecosystem is entirely open-source, and consists of the following components:
+
+\begin{itemize}
+    \item \textbf{transformers} (Hugging Face): provides pretrained models, tokenizers, and ready-made pipelines. Described as ``the model zoo,'' with the caveat that model licenses must be checked before use.
+
+    \vspace{0.2cm}
+    \item \textbf{torch} (PyTorch): the tensor library underlying the models. The course will occasionally inspect the internals of a \emph{forward pass} directly.
+
+    \vspace{0.2cm}
+    \item \textbf{Colab / JupyterLab} (notebooks): the environment in which all lab work happens, offering free (though rate-limited) GPU access, together with the practice of clearing GPU memory when finished.
+
+    \vspace{0.2cm}
+    \item \textbf{LangChain \& LCEL}: a framework for client-side orchestration of model endpoints via prompts, chains, and \emph{runnables} (composable units of computation).
+
+    \vspace{0.2cm}
+    \item \textbf{LangGraph}: models agents as \textbf{state graphs}, with nodes, edges, and conditional transitions — this is the tool used for the more advanced agentic architectures in Act III.
+
+    \vspace{0.2cm}
+    \item \textbf{vLLM / NVIDIA NIM} (inference servers): serve models behind OpenAI-style APIs, supporting batching, streaming, and request routing.
+
+    \vspace{0.2cm}
+    \item \textbf{FastAPI}: used to build a custom GenAI server when the standard inference servers do not cover a specific need.
+
+    \vspace{0.2cm}
+    \item \textbf{The model families -- BERT, GPT-2, T5, LLaMA}: representative examples of, respectively, \textbf{encoder-only} models, \textbf{decoder-only} models, \textbf{encoder-decoder} models, and their larger modern successors. Each family will be studied in the act where it is architecturally relevant (BERT in Act I, GPT-2/T5 in Act II, LLaMA-class models throughout Act III as the substrate for agentic systems).
+\end{itemize}
+
+\begin{defbox}{Encoder vs. Decoder vs. Encoder-Decoder (preview)}
+    \begin{itemize}
+\item\textbf{Encoder} models (e.g., BERT) map an input sequence of $n$ tokens to $n$ contextualized representations (encodings), and are best suited to \emph{understanding} tasks: classification, tagging, extractive QA. 
+\item \textbf{Decoder} models (e.g., GPT-2) generate one new token at a time, conditioned on all previous tokens, and are best suited to \emph{generation} tasks. 
+\item\textbf{Encoder-decoder} models (e.g., T5) combine both: an encoder compresses the input, and a decoder generates an output conditioned on that compressed representation, making them well-suited to sequence-to-sequence tasks such as translation and summarization. This distinction will be developed rigorously starting in Act I  and revisited in Act II. \end{itemize}
+\end{defbox}
+
+\subsection{Contents of the Course Acts}
+
+\subsubsection{Act I - From Deep Learning to LLMs}
+
+\textbf{Timeframe:} 15 Sep -- 8 Oct, 8 sessions, notebooks 00--03.
+
+\textbf{Big idea.} Language can be treated as an ordered sequence of classes. Transformers are, by construction, natural sequence reasoners: a BERT-style \textbf{encoder} takes $n$ input tokens and produces $n$ contextualized encodings, and that alone is already sufficient machinery to classify, tag, and answer questions about a text.
+
+\begin{defbox}{Encoder (BERT-style)}
+A Transformer-based model that maps an input sequence of $n$ tokens to $n$ output vectors (encodings), each one a contextualized representation of the corresponding input token — i.e., it encodes not just the token itself but its meaning in relation to every other token in the sequence, thanks to self-attention.
+\end{defbox}
+
+ Because the output preserves the same length as the input, encoders are naturally suited to tasks that require a judgment \emph{about} the input (classification, tagging) rather than the generation of new text.
+
+The act is broken down into five topic blocks:
+
+\begin{itemize}
+    \item \textbf{Recalling deep learning.} Revisits what ``language'' means from a modeling perspective, and introduces the three base formulations a language model can take: \texttt{per-token prediction} (predict a label for each token), \texttt{sequence-level prediction} (predict a single label for the whole sequence), and \texttt{generation} (produce new tokens).
+
+    \vspace{0.2cm}
+    \item \textbf{Hugging Face and your first LLM.} Introduces the Hugging Face \emph{pipeline} abstraction, structured as preprocess $\rightarrow$ forward $\rightarrow$ postprocess. Covers the available task options, how to inspect (``dissect'') each stage of a pipeline, and the practice of checking model licenses before use.
+
+    \vspace{0.2cm}
+    \item \textbf{Architecture intuitions.} The core theoretical content of Act I: tokenization; word embeddings and positional embeddings; cosine similarity (as a way to compare embeddings); softmax attention; the Transformer encoder block; the specific adaptations that turn a generic Transformer encoder into BERT (multi-head attention, layer normalization, GELU activation); and the practice of visualizing attention weights.
+
+    \vspace{0.2cm}
+    \item \textbf{Encoder tasks.} The practical payoff of the architecture: token classification (Named Entity Recognition), range prediction for extractive question answering (predicting the start/end position of an answer span inside a passage), sequence classification (e.g., sentiment analysis), running several pipeline queries at once, and zero-shot classification implemented via \emph{entailment} (framing ``does label $L$ apply to text $T$?'' as a natural language inference problem).
+
+    \vspace{0.2cm}
+    \item \textbf{Lab.} Hands-on practice chaining encoder pipelines together: classify, tag, answer, and perform zero-shot classification.
+\end{itemize}
+
+\begin{defbox}{Self-attention}
+A mechanism that allows each token in a sequence to compute a weighted combination of all other tokens' representations, where the weights (attention scores) are derived from a similarity measure (typically a scaled dot product) between the token's own representation and every other token's representation, followed by a softmax normalization. 
+\end{defbox}
+
+This is what lets a Transformer capture long-range dependencies without processing the sequence sequentially, unlike RNNs/LSTMs. The precise mathematical formulation (queries, keys, values) is developed in the dedicated ``Architecture intuitions'' sessions of Act I.
+
+\subsubsection{Act II - Decoding Models \& GenAI Services}
+
+\textbf{Timeframe:} 13 Oct -- 29 Oct, 6 sessions, notebooks 04, 06, 6.5.
+
+\textbf{Big idea.} If encoders read, \textbf{decoders write}. The generative mechanism is always the same: predict the next token, feed it back into the model as part of the input, and repeat. This single mechanism underlies translation, summarization, and conversation. Once a model can write, the second half of the act is about exposing it as a service: putting it behind a server so that many users/programs can query it concurrently.
+
+Topic breakdown:
+
+\begin{itemize}
+    \item \textbf{Sequence generation.} Introduces the machine translation task as the canonical example of sequence-to-sequence generation; the transition from encoding to decoding; how decoder training can be parallelized (teacher forcing, unlike inference which is inherently sequential); and the notion of context length limits.
+
+    \vspace{0.2cm}
+    \item \textbf{GPT-style models.} Decoder-only architectures and autoregressive generation; a detailed reading of what happens inside a GPT-2 forward pass.
+
+    \vspace{0.2cm}
+    \item \textbf{Encoders vs.\ decoders vs.\ encoder-decoders.} A comparative treatment including T5 and Flan-T5 (encoder-decoder models), the KV-caching optimization (reusing previously computed key/value attention tensors to speed up autoregressive generation), and guidance on when each architecture family is preferable.
+
+    \vspace{0.2cm}
+    \item \textbf{Towards general-purpose models.} Instruction following, in-context learning (the model adapts its behavior from examples given in the prompt, without weight updates), chain-of-thought reasoning, and conversational tasks.
+
+    \vspace{0.2cm}
+    \item \textbf{LLMs in the wild.} The historical trajectory from GPT-2 to ChatGPT; productized LLM applications; a survey of the ``problem landscape'' (the kinds of failure modes and limitations one encounters in practice); and hallucination.
+
+    \vspace{0.2cm}
+    \item \textbf{Inference servers.} vLLM and NVIDIA NIM as examples of inference servers exposing OpenAI-style APIs, together with query routers; the distinction between raw \emph{completions} and \emph{chat completions}; asynchronous processing, streaming responses, and concurrency; and finally, building a custom GenAI server with FastAPI when off-the-shelf servers do not fit a specific need.
+\end{itemize}
+
+\begin{defbox}{Autoregressive generation}
+The process by which a decoder-only model generates text: at each step, the model receives the sequence generated so far, predicts a probability distribution over the vocabulary for the next token, samples (or greedily picks) one token from that distribution, appends it to the sequence, and repeats.
+\end{defbox}
+
+\begin{defbox}{Hallucination}
+A phenomenon in which a language model generates text that is fluent and confident in tone but factually incorrect or unsupported by any real evidence.  It arises structurally from the way autoregressive generation works (the model optimizes for plausible continuations, not for truth), rather than being a fixable implementation error.
+\end{defbox}
+
+\subsubsection{Act III -- Orchestration, Retrieval \& Agents}
+
+\textbf{Timeframe:} 3 Nov -- 17 Dec, 12 sessions, notebooks 07, 7.5, 7.6, plus the final project.
+
+\textbf{Big idea.} A language model, by itself, is just a forecasting function. A real \emph{application} is that model plus surrounding software: prompts, retrieval mechanisms, routing logic, tools, and state. This is the point where, according to the course's own framing, text mining stops being pure modeling and becomes engineering.
+
+Topic breakdown:
+
+\begin{itemize}
+    \item \textbf{Structuring LLM workflows.} Prompt engineering; LangChain and LCEL \emph{runnables} as composable building blocks; iterative and parallel generation strategies; techniques for pushing a model's output beyond what it would produce from its raw priors alone.
+
+    \vspace{0.2cm}
+    \item \textbf{Retrieval and RAG.} The Retrieve $\rightarrow$ Augment $\rightarrow$ Generate pipeline; semantic search implemented via embeddings and vector stores; dialog/retrieval agents; routing systems that decide which retrieval or generation path to take. Includes a lab building a document-grounded chatbot.
+
+    \vspace{0.2cm}
+    \item \textbf{Structured outputs and tooling.} Techniques for forcing a model to predict a valid schema (e.g., JSON conforming to a specification) rather than free text; grammar enforcement and constrained decoding; tool calling (the model emits a structured request to invoke an external function).
+
+    \vspace{0.2cm}
+    \item \textbf{Agentic systems.} The Observe $\rightarrow$ Think $\rightarrow$ Act loop; multi-tool agents; conversational tool-calling; the \textbf{ReAct} loop specifically.
+
+    \vspace{0.2cm}
+    \item \textbf{Multi-agent systems and state.} Data pipelines composed of multiple agents; iterative refinement of outputs; local state accumulation across steps; communication protocols between agents; the general argument for why one would use multiple agents rather than one.
+
+    \vspace{0.2cm}
+    \item \textbf{LangGraph and beyond.} Modeling agents explicitly as state graphs; content-generation pipelines with structured output and persistent running state; and the final project itself.
+\end{itemize}
+
+\begin{defbox}{Retrieval-Augmented Generation (RAG)}
+An architecture in which, before generating a response, the system first retrieves relevant pieces of external text (typically via a semantic/vector search over an embedded document collection) and inserts them into the model's context window, so that the generation step is grounded in that retrieved evidence rather than relying solely on the model's parametric knowledge.
+\end{defbox}
+
+\begin{defbox}{ReAct loop}
+An agentic control pattern in which the model alternates between reasoning steps (``Think''), taking an action such as calling a tool (``Act''), and incorporating the result of that action (``Observe''), looping until the task is solved. 
+\end{defbox}
+
+\subsection{Calendar and Schedule }
+
+\subsubsection{Schedule, Part 1 of 2: September \& October}
+
+\textbf{September}
+\begin{itemize}
+    \item[1.] Tue 15 Sep -- Kick-off: what is text mining, the plan, the tools.
+    \item[2.] Thu 17 Sep -- From deep learning to language modeling.
+    \item[3.] Tue 22 Sep -- Hugging Face \& our first LLM: inside the pipeline.
+    \item[4.] Thu 24 Sep -- Architecture intuitions I: tokens \& embeddings.
+    \item[5.] Tue 29 Sep -- Architecture intuitions II: attention, transformers, BERT.
+\end{itemize}
+
+\textbf{October}
+\begin{itemize}
+    \item[6.] Thu 1 Oct -- Encoder tasks I: token classification \& extractive QA.
+    \item[7.] Tue 6 Oct -- Encoder tasks II: sequence classification \& zero-shot.
+    \item[8.] Thu 8 Oct -- Lab: encoder pipelines in practice.
+    \item[9.] Tue 13 Oct -- Seq2seq I: translation, decoders, GPT-style generation.
+    \item[10.] Thu 15 Oct -- Seq2seq II: encoder-decoders (T5), context limits.
+    \item[11.] Tue 20 Oct -- Instructions, in-context learning, chain-of-thought.
+    \item[12.] Thu 22 Oct -- LLMs in the wild: from GPT-2 to ChatGPT.
+    \item[13.] Tue 27 Oct -- Inference servers: vLLM, NIM, OpenAI-style APIs.
+    \item[14.] Thu 29 Oct -- Concurrency, streaming \& your own GenAI server.
+\end{itemize}
+
+Sessions 1--8 correspond to Act I; sessions 9--14 correspond to Act II.
+
+\subsubsection{Schedule, Part 2 of 2: November \& December}
+
+\textbf{November}
+\begin{itemize}
+    \item[15.] Tue 3 Nov -- Structuring LLM workflows: prompts, LangChain, LCEL.
+    \item[16.] Thu 5 Nov -- Retrieval \& RAG: embeddings, vector search, routing.
+    \item[17.] Tue 10 Nov -- Lab: a RAG chatbot over real documents.
+    \item[--] Thu 12 Nov -- \emph{no class} (lectures suspended 11--13 November).
+    \item[18.] Tue 17 Nov -- Structured outputs: schemas \& constrained decoding.
+    \item[19.] Thu 19 Nov -- Agentic systems: tool calling \& the ReAct loop.
+    \item[20.] Tue 24 Nov -- Multi-agent systems, state \& communication.
+    \item[21.] Thu 26 Nov -- LangGraph: agents as state graphs.
+\end{itemize}
+
+\textbf{December}
+\begin{itemize}
+    \item[22.] Tue 1 Dec -- Content pipelines: structured output, running state.
+    \item[23.] Thu 3 Dec -- Pre-assessment primer \& final project kick-off.
+    \item[--] Tue 8 Dec -- \emph{no class} (Immaculate Conception).
+    \item[24.] Thu 10 Dec -- Project lab: build your pipeline, with help.
+    \item[25.] Tue 15 Dec -- Project presentations I.
+    \item[26.] Thu 17 Dec -- Project presentations II \& wrap-up.
+\end{itemize}
+
+Sessions 15--26 correspond to Act III, culminating in the final project presentations.
+
+\subsection{Assessment}
+
+The evaluation of the course rests on three pillars:
+
+\begin{enumerate}
+    \item \textbf{Run the notebooks.} Every topic is paired with a Colab notebook. Students run the code, break it, and fix it \emph{in class}, not the night before at home. Exercises are explicitly marked \texttt{[Exercise]} and are done collectively.
+
+    \vspace{0.2cm}
+    \item \textbf{Build a pipeline.} The final project: an LLM-powered text pipeline built by the student, in the style of the course's own assessment philosophy. The choice of approach (retrieval-based, tool-based, or agent-based), the documents used, and the problem addressed are all up to the student.
+
+    \vspace{0.2cm}
+    \item \textbf{Tell the story.} The project is presented during the last week of the course  and discussed further during the exam. The implicit criterion for having ``learned the course'' is the ability to explain \emph{why} the pipeline works, not just that it works.
+\end{enumerate}
+
+
+
+
+
+
+1000000000000000000000
+
